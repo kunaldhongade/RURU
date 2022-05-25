@@ -64,7 +64,7 @@ export default function MyAssets() {
                                     alt="Picture of the author"
                                     className="rounded"
                                     width={350}
-                                    height={500}
+                                    height={470}
                                 // blurDataURL="data:..." automatically provided
                                 // placeholder="blur" // Optional blur-up while loading
                                 />

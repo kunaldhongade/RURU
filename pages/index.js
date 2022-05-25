@@ -81,7 +81,7 @@ export default function Home() {
                   src={nft.image}
                   alt="picture of the author"
                   width={500}
-                  height={500}
+                  height={470}
                 />
 
                 <div className="p-4">
@@ -89,7 +89,7 @@ export default function Home() {
                     {nft.name}
                   </p>
                   <div style={{ height: '70px', overflow: 'hidden' }}>
-                    <p className="text-gray-400">{nft.description}</p>
+                    <p className="text-gray-300">{nft.description}</p>
                   </div>
                 </div>
 
