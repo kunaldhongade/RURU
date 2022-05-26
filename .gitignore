@@ -41,3 +41,8 @@ typechain
 #Hardhat files
 cache
 artifacts
+
+.vercel
+
+# static folder for DigitalOcean App Platform
+_static
