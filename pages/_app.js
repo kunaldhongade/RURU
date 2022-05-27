@@ -3,7 +3,7 @@ import Link from 'next/link'
 import Web3 from 'web3'
 import { ethers } from 'ethers';
 import Web3Modal from 'web3modal'
-import Image from 'next/Image'
+import Image from 'next/image'
 
 const provider_options = {
 
