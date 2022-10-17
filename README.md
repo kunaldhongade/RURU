@@ -33,8 +33,8 @@
 
  ## HAPPY HACKING!!🥳
 
- <a href="https://github.com/Srishti44-g/HACTOBERFEST-2022-For-all-Begineers/graphs/contributors">
+ <a href="https://github.com/kunaldhongade/ruru/graphs/contributors">
 
-  <img src="https://contrib.rocks/image?repo=Srishti44-g/HACTOBERFEST-2022-For-all-Begineers" />
+  <img src="https://contrib.rocks/image?repo=kunaldhongade/ruru" />
 
 </a>
