@@ -22,7 +22,7 @@ export const fetchNftsImages = async (imageURI: string) => {
   try {
     const pinata = new PinataSDK({
       pinataJwt: import.meta.env.VITE_PINATA_IPFS_JWT,
-      pinataGateway: "plum-cheap-wasp-820.mypinata.cloud",
+      pinataGateway: "blue-historic-grasshopper-499.mypinata.cloud",
       pinataGatewayKey: import.meta.env.VITE_PINATA_CLOUD_SECERET,
     });
 

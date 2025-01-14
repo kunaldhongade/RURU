@@ -1,19 +1,18 @@
-import React, { createContext, ReactNode, useEffect, useState } from "react";
+import { Error } from "@mui/icons-material";
 import { ethers } from "ethers";
 import { PinataSDK } from "pinata-web3";
-import {
-  RPC_URL,
-  CONTRACT_ADDRESS,
-  cleanNftsData,
-} from "../constants";
+import React, { createContext, ReactNode, useEffect, useState } from "react";
 import contractAbi from "../abi/NFT_marketPlace.json";
-import { filterednftsData } from "../constants";
-import { Error } from "@mui/icons-material";
-
+import {
+  cleanNftsData,
+  CONTRACT_ADDRESS,
+  filterednftsData,
+  RPC_URL,
+} from "../constants";
 
 const pinata = new PinataSDK({
-  pinataJwt:import.meta.env.VITE_PINATA_IPFS_JWT,
-  pinataGateway: "plum-cheap-wasp-820.mypinata.cloud",
+  pinataJwt: import.meta.env.VITE_PINATA_IPFS_JWT,
+  pinataGateway: "blue-historic-grasshopper-499.mypinata.cloud",
 });
 
 interface topSellersProps {
@@ -29,13 +28,13 @@ type ContextProps = {
   ) => Promise<boolean>;
   getMarketNFTs: () => Promise<filterednftsData[]>;
   getMyNFTs: () => Promise<filterednftsData[]>;
-  getOwnerNFTs: (arg: string,guest:boolean) => Promise<filterednftsData[]>;
+  getOwnerNFTs: (arg: string, guest: boolean) => Promise<filterednftsData[]>;
   fetchToken: (arg: number) => Promise<[]>;
   getMyListedNFTS: () => Promise<filterednftsData[]>;
   buyNFT: (arg: number, amount: string) => Promise<boolean>;
   removeNftFromMarket: (arg: number) => Promise<boolean>;
   resellNFT: (arg: number, newPrice: number) => Promise<boolean>;
-  topSellers:topSellersProps[];
+  topSellers: topSellersProps[];
 };
 
 export const ContractContext = createContext<ContextProps>({
@@ -48,7 +47,7 @@ export const ContractContext = createContext<ContextProps>({
   buyNFT: async () => true,
   removeNftFromMarket: async () => true,
   resellNFT: async () => true,
-  topSellers:[],
+  topSellers: [],
 });
 
 type Props = {
@@ -56,19 +55,15 @@ type Props = {
 };
 
 export const ContractContextWrapper = ({ children }: Props) => {
-
-
-
   async function uploadImageToIPFS(file: File) {
-  
     try {
-      const response = await pinata.upload.file(file)
-      console.log('response',response)
-      return response.IpfsHash
+      const response = await pinata.upload.file(file);
+      console.log("response", response);
+      return response.IpfsHash;
     } catch (error: any) {
       console.error("Error uploading file to IPFS:", error);
-            //@ts-ignore
-      throw new Error(error)
+      //@ts-ignore
+      throw new Error(error);
     }
   }
 
@@ -113,8 +108,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
       console.log(`Metadata hash: ipfs://${metaHash}`);
       return await createNFT(price, metaHash); // send the request to the smartcontract regarding creation of the nft.
     } catch (error) {
-      console.log("Something went wrong", error)
-      ;
+      console.log("Something went wrong", error);
       return false;
     }
   };
@@ -227,33 +221,32 @@ export const ContractContextWrapper = ({ children }: Props) => {
       return false;
     }
   };
-  const getOwnerNFTs = async (onwerId: string,guest:boolean) => {
+  const getOwnerNFTs = async (onwerId: string, guest: boolean) => {
     const { abi } = contractAbi;
     let provider;
     let nftMarketplaceContract;
-    if(guest){
-       provider = new ethers.providers.JsonRpcProvider(RPC_URL);
-       nftMarketplaceContract = new ethers.Contract(
+    if (guest) {
+      provider = new ethers.providers.JsonRpcProvider(RPC_URL);
+      nftMarketplaceContract = new ethers.Contract(
         CONTRACT_ADDRESS,
         abi,
         provider
       );
-    }
-    else{
-    if (!window.ethereum || !window.ethereum.request) {
-      alert("MetaMask is not installed or the provider is unavailable!");
-      return [];
-    }
-    provider = new ethers.providers.Web3Provider(window.ethereum);
-    await provider.send("eth_requestAccounts", []);
+    } else {
+      if (!window.ethereum || !window.ethereum.request) {
+        alert("MetaMask is not installed or the provider is unavailable!");
+        return [];
+      }
+      provider = new ethers.providers.Web3Provider(window.ethereum);
+      await provider.send("eth_requestAccounts", []);
 
-    const signer = provider.getSigner();
-     nftMarketplaceContract = new ethers.Contract(
-      CONTRACT_ADDRESS,
-      abi,
-      signer
-    );
-  }
+      const signer = provider.getSigner();
+      nftMarketplaceContract = new ethers.Contract(
+        CONTRACT_ADDRESS,
+        abi,
+        signer
+      );
+    }
     try {
       const ownerNFTS = await nftMarketplaceContract.getOwnerNFTS(onwerId);
       const data = await cleanNftsData(ownerNFTS);
@@ -374,7 +367,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
     try {
       const data = await openMetaMask();
       if (data == -1)
-            //@ts-ignore
+        //@ts-ignore
         throw new Error("Error occured while signing the transaction");
 
       const nftMarketplaceContract = new ethers.Contract(
@@ -383,8 +376,8 @@ export const ContractContextWrapper = ({ children }: Props) => {
         data.signer
       );
 
-      const PRICE_IN_WEI = ethers.utils.parseEther(price.toString())
-      console.log('price in wei',PRICE_IN_WEI)
+      const PRICE_IN_WEI = ethers.utils.parseEther(price.toString());
+      console.log("price in wei", PRICE_IN_WEI);
 
       const tx = await nftMarketplaceContract.createNFT(PRICE_IN_WEI, metahash);
       console.log(`Contract tx: ${tx.hash}`);
@@ -401,31 +394,33 @@ export const ContractContextWrapper = ({ children }: Props) => {
     // here we have to update the state so that fetching happens by the home page using use effect.
   };
 
-  const [Sellers, updateSellers] = useState<Map<string,topSellersProps>>(new Map());
-  const [topSellers,updateTopSellers]=useState<topSellersProps[]>([])
+  const [Sellers, updateSellers] = useState<Map<string, topSellersProps>>(
+    new Map()
+  );
+  const [topSellers, updateTopSellers] = useState<topSellersProps[]>([]);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     const sellersArray = Array.from(Sellers.values());
 
     sellersArray.sort((a, b) => b.sales - a.sales);
 
-     updateTopSellers(sellersArray.slice(0, 5))
-      },[Sellers])
-  
+    updateTopSellers(sellersArray.slice(0, 5));
+  }, [Sellers]);
 
   useEffect(() => {
     let nftref: ethers.Contract | null = null;
     const handleEventListener = (owner: string, Sales: number) => {
-      let sales=+ethers.utils.formatEther(
-        Sales.toString())
+      let sales = +ethers.utils.formatEther(Sales.toString());
       updateSellers((prevMap) => {
         const newMap = new Map(prevMap);
 
         if (newMap.has(owner)) {
           const existingSeller = newMap.get(owner);
           if (existingSeller) {
-            newMap.set(owner, { ...existingSeller, sales: existingSeller.sales + sales });
+            newMap.set(owner, {
+              ...existingSeller,
+              sales: existingSeller.sales + sales,
+            });
           }
         } else {
           newMap.set(owner, { owner, sales });
@@ -433,7 +428,7 @@ export const ContractContextWrapper = ({ children }: Props) => {
 
         return newMap;
       });
-  
+
       console.log(
         `Top Seller: ${owner}, Total Sales: ${ethers.utils.formatEther(
           sales
